@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
-import API_URL from "../../envs/env";
+
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 export interface User {

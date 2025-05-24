@@ -1,7 +1,9 @@
 import { rest } from 'msw';
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 export const handlers = [
-  rest.get('/posts', (req, res, ctx) => {
+  rest.get(`${BASE_URL}/posts`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json([
@@ -11,7 +13,7 @@ export const handlers = [
     );
   }),
 
-  rest.get('/users', (req, res, ctx) => {
+  rest.get(`${BASE_URL}/users`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json([

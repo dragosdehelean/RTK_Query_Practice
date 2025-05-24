@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["jest", "node", "cypress"]
+    "types": ["node", "cypress", "vitest/globals", "@testing-library/jest-dom"],
   },
-  "include": ["src", "tests", "cypress"]
+  "include": ["src", "tests", "cypress", "vite-env.d.ts"]
 }
