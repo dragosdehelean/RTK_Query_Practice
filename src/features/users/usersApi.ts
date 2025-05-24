@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
+import API_URL from "../../envs/env";
+
 
 export interface User {
   id: number;
@@ -16,7 +18,7 @@ const initialState = usersAdapter.getInitialState();
 export const usersApi = createApi({
   reducerPath: "usersApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://jsonplaceholder.typicode.com/",
+    baseUrl: API_URL,
   }),
   tagTypes: ["Users"], // Adăugăm tag-ul pentru invalidare
   endpoints: (builder) => ({

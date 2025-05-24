@@ -1,5 +1,7 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
+import API_URL from "../../envs/env";
+
 
 export interface Post {
   id: number;
@@ -11,38 +13,41 @@ const postsAdapter = createEntityAdapter<Post>();
 const initialState = postsAdapter.getInitialState();
 
 export const postsApi = createApi({
-  reducerPath: 'postsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://jsonplaceholder.typicode.com/' }),
-  tagTypes: ['Posts'], // Adăugăm tag-ul pentru invalidare
+  reducerPath: "postsApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: API_URL
+  }),
+  tagTypes: ["Posts"], // Adăugăm tag-ul pentru invalidare
   endpoints: (builder) => ({
     getPosts: builder.query<EntityState<Post>, void>({
-      query: () => 'posts',
+      query: () => "posts",
       keepUnusedDataFor: 10,
-      transformResponse: (response: Post[]) => postsAdapter.setAll(initialState, response),
-      providesTags: ['Posts'], // Marchează datele ca fiind asociate cu tag-ul 'Posts'
+      transformResponse: (response: Post[]) =>
+        postsAdapter.setAll(initialState, response),
+      providesTags: ["Posts"], // Marchează datele ca fiind asociate cu tag-ul 'Posts'
     }),
     addPost: builder.mutation<Post, Partial<Post>>({
       query: (newPost) => ({
-        url: 'posts',
-        method: 'POST',
+        url: "posts",
+        method: "POST",
         body: newPost,
       }),
-      invalidatesTags: ['Posts'], // Invalidează cache-ul pentru 'Posts'
+      invalidatesTags: ["Posts"], // Invalidează cache-ul pentru 'Posts'
     }),
     updatePost: builder.mutation<Post, Partial<Post>>({
       query: ({ id, ...patch }) => ({
         url: `posts/${id}`,
-        method: 'PUT',
+        method: "PUT",
         body: patch,
       }),
-      invalidatesTags: ['Posts'], // Invalidează cache-ul pentru 'Posts'
+      invalidatesTags: ["Posts"], // Invalidează cache-ul pentru 'Posts'
     }),
     deletePost: builder.mutation<{ id: number }, number>({
       query: (id) => ({
         url: `posts/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Posts'], // Invalidează cache-ul pentru 'Posts'
+      invalidatesTags: ["Posts"], // Invalidează cache-ul pentru 'Posts'
     }),
   }),
 });
