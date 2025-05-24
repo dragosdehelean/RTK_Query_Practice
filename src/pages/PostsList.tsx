@@ -17,7 +17,7 @@ const PostsList = () => {
       <h2>Posts</h2>
       <ul>
         {postViewModels.map((post) => (
-          <li key={post.id}>
+          <li key={post.id} data-testid="post-item">
             <strong>{post.title}</strong>
             <br />
             by{' '}

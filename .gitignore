@@ -1,5 +1,6 @@
 # Node.js
 node_modules/
+coverage/
 
 # Logs
 logs
@@ -36,3 +37,8 @@ build/
 *.lock
 *.bak
 *.tmp
+
+# Cypress artifacts
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
