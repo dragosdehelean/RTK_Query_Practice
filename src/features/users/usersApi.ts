@@ -18,17 +18,27 @@ export const usersApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://jsonplaceholder.typicode.com/",
   }),
+  tagTypes: ["Users"], // Adăugăm tag-ul pentru invalidare
   endpoints: (builder) => ({
     getUsers: builder.query<EntityState<User>, void>({
       query: () => "users",
       keepUnusedDataFor: 10,
       transformResponse: (response: User[]) =>
         usersAdapter.setAll(initialState, response),
+      providesTags: ["Users"]
     }),
     getUser: builder.query<User, number>({
-      query: (id) => ({url: `users/${id}`}),      
+      query: (id) => ({ url: `users/${id}` }),
+    }),
+    updateUser: builder.mutation<User, Partial<User>>({
+      query: ({ id, ...patch }) => ({
+        url: `users/${id}`,
+        method: "PUT",
+        body: patch,
+      }),
+      invalidatesTags: ["Users"],
     }),
   }),
 });
 
-export const { useGetUsersQuery, useGetUserQuery } = usersApi;
+export const { useGetUsersQuery, useGetUserQuery, useUpdateUserMutation } = usersApi;
