@@ -1,60 +1,130 @@
-# ✅ React RTK Query Testing Guide
+# 🧪 React RTK Query Testing Guide
 
-## 🧪 Types of Tests Implemented
+## Types of Tests
 
-### 1. Unit Tests (`*.test.ts`)
-- Purpose: Test isolated logic (selectors, API endpoints, utility functions).
-- Tools: Jest, @testing-library/react
+### 1. Unit Tests (`*.test.ts/tsx`)
+- Purpose: Test isolated logic (selectors, API endpoints, components)
+- Tools: Vitest, @testing-library/react
+- Location: Colocated with source files (e.g., `postsApi.test.ts` next to `postsApi.ts`)
 
-### 2. Integration Tests (recommended with MSW)
-- Purpose: Test interaction between components and API layer.
-- Tools: Jest, MSW
+### 2. Integration Tests with MSW
+- Purpose: Test components with mocked API layer
+- Tools: Vitest, MSW (Mock Service Worker)
+- Location: `src/mocks/` for handlers and server setup
+- Examples: Component tests that verify API integration
 
-> For example, `selectPostViewModels.test.ts` checks selector logic given a mocked Redux state.
+### 3. End-to-End Tests
+- Tool: Cypress
+- Location: `cypress/e2e/`
+- Tests complete user flows with real UI interaction
 
-### 3. End-to-End Tests (optional but ideal)
-- Tools: Cypress (needs to be installed separately)
-- Tests the real flow: user interaction + navigation + side-effects
-
-## ⚙️ Setup
-
-```bash
-npm install --save-dev jest ts-jest @testing-library/react @testing-library/jest-dom msw
-```
-
-## 📁 Test File Structure
+## Project Test Structure
 
 ```
 src/
   features/
     posts/
-      postsApi.test.ts
-      selectors.test.ts
-      usePosts.test.ts
+      postsApi.test.ts     # API endpoint tests
+      postsApi.ts
+      selectors.test.ts    # Redux selector tests
+      selectors.ts
     users/
-      usersApi.test.ts
-  setupTests.ts
-jest.config.ts
+      usersApi.test.ts     # API endpoint tests
+      usersApi.ts
+  mocks/
+    handlers.ts            # MSW API mock handlers
+    server.ts             # MSW server setup
+  pages/
+    PostsList.test.tsx    # Component tests
+    UserDetail.test.tsx   # Component tests
+  test/
+    setup.ts             # Test environment setup
+cypress/
+  e2e/
+    posts.cy.ts          # E2E test suite
 ```
 
-## 🧵 Example Explanation
+## Test Setup
 
-### `selectors.test.ts`
+### Vitest Configuration
+Project uses Vitest for unit and integration testing:
+- `vitest.config.ts` - Test runner configuration
+- `src/test/setup.ts` - Global test setup
+
+### MSW Setup
+Mock Service Worker intercepts and mocks API calls:
+- `src/mocks/handlers.ts` - API route mocks
+- `src/mocks/server.ts` - MSW server configuration
+
+### Cypress Setup
+End-to-end testing configuration:
+- `cypress.config.ts` - Cypress configuration
+- `cypress/e2e/` - Test specs
+- `cypress/support/` - Support files and commands
+
+## Running Tests
+
+```bash
+# Run unit and integration tests
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run E2E tests
+npm run cypress:open
+
+# Run specific test file
+npm run test src/features/posts/postsApi.test.ts
+```
+
+## Best Practices
+
+1. **Colocation**: Keep test files next to the code they test
+2. **Mocking**:
+   - Use MSW for API mocks
+   - Mock only what's necessary
+3. **Testing Strategy**:
+   - Unit test complex logic and selectors
+   - Integration test components with API calls
+   - E2E test critical user flows
+4. **Coverage**:
+   - Aim for high coverage of business logic
+   - Focus on testing behavior, not implementation
+5. **Maintenance**:
+   - Keep tests focused and readable
+   - Update tests when changing code
+
+## Example Tests
+
+### API Test (`postsApi.test.ts`)
 ```ts
-const mockState = {
-  posts: { ids: ['1'], entities: { '1': { id: '1', title: 'Post', userId: 1 } } },
-  users: { ids: ['1'], entities: { '1': { id: 1, name: 'User' } } }
-};
-const result = selectPostViewModels(mockState);
-// ✅ Validates that selector combines post and user info correctly.
+describe('posts api', () => {
+  it('fetches posts successfully', async () => {
+    const result = await store.dispatch(postsApi.endpoints.getPosts.initiate())
+    expect(result.data).toBeDefined()
+    expect(result.data.length).toBeGreaterThan(0)
+  })
+})
 ```
 
-## 🧠 Best Practices
+### Component Test (`PostsList.test.tsx`)
+```ts
+test('renders posts from API', async () => {
+  render(<PostsList />)
+  expect(await screen.findByText(/loading/i)).toBeInTheDocument()
+  expect(await screen.findByText(/post title/i)).toBeInTheDocument()
+})
+```
 
-- 🧩 Test selectors with mock state, not real store.
-- 🔌 Use MSW to mock API for integration tests.
-- 🚦 Add Cypress for full E2E testing later (`tests/e2e` folder recommended).
-
----
-
-> Ready to scale: Add more tests as your app grows. Focus first on selectors + logic-heavy hooks.
+### E2E Test (`posts.cy.ts`)
+```ts
+describe('Posts Feature', () => {
+  it('displays posts and navigates to details', () => {
+    cy.visit('/')
+    cy.get('[data-testid="post-list"]').should('be.visible')
+    cy.contains('Post Title').click()
+    cy.url().should('include', '/posts/')
+  })
+})
+```
