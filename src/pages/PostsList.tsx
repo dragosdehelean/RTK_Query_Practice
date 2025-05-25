@@ -60,8 +60,6 @@ const PostsList = () => {
       </div>
       {visiblePosts < postViewModels.length && (
         <div className="text-center mt-4 mb-5">
-          {" "}
-          {/* Adăugăm o margine de jos */}
           <button
             className="btn btn-primary"
             onClick={handleLoadMore}

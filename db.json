@@ -1,0 +1,37 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Mock Post 1",
+      "userId": 1
+    },
+    {
+      "id": "2",
+      "title": "Mock Post 2",
+      "userId": 2
+    },
+    {
+      "id": "3",
+      "title": "Mock Post 3",
+      "userId": 3
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "User One"
+    },
+    {
+      "name": "User Two 232332",
+      "email": "sd@rt.rt",
+      "company": {
+        "name": ""
+      },
+      "id": "2"
+    },
+    {
+      "id": "3",
+      "name": "User Three"
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  mode: 'test', 
   test: {
     globals: true,
     environment: 'jsdom',
@@ -12,7 +13,10 @@ export default defineConfig({
       provider: 'v8',
       reportsDirectory: './coverage',
       reporter: ['text', 'html'],
-      exclude: ['src/test', 'src/mocks', '**/*.d.ts'],
+      // exclude: ['src/test', 'src/mocks', '**/*.d.ts'],
     },
   },
+  define: {
+    'import.meta.env.VITE_API_URL': JSON.stringify('https://jsonplaceholder.typicode.com')
+  }
 });

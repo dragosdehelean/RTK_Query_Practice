@@ -4,9 +4,6 @@ import PostsList from './PostsList';
 import { Provider } from 'react-redux';
 import { store } from '../app/store';
 import { BrowserRouter } from 'react-router-dom';
-import { server } from '../mocks/server';
-import { rest } from 'msw';
-
 
 // helper de randare cu provider și router
 const renderComponent = () =>

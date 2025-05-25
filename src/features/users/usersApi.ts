@@ -20,7 +20,7 @@ const initialState = usersAdapter.getInitialState();
 export const usersApi = createApi({
   reducerPath: "usersApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: API_URL,
+    baseUrl: API_URL
   }),
   tagTypes: ["Users"], // Adăugăm tag-ul pentru invalidare
   endpoints: (builder) => ({
